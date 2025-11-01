@@ -1,6 +1,32 @@
-def main():
-    print("Hello from ai-bot!")
+import os
+import sys
+from dotenv import load_dotenv
+from google import genai
+from google.genai import types
 
+load_dotenv()
+api_key = os.environ.get("GEMINI_API_KEY")
 
-if __name__ == "__main__":
-    main()
+client = genai.Client(api_key=api_key)
+
+if len(sys.argv) == 1:
+    raise Exception("No prompt Provided")
+else: 
+    user_prompt = sys.argv[1]
+    
+    messages = [
+        types.Content(role = "user", parts = [types.Part(text=user_prompt)]),
+    ]
+
+    response = client.models.generate_content(
+            model = 'gemini-2.5-flash', 
+            contents = user_prompt 
+    )
+    if(len(sys.argv) > 2 and sys.argv[2] == "--verbose"):
+        print(f"User Prompt : {user_prompt}")
+        print(f"Prompt Tokens : {response.usage_metadata.prompt_token_count}")
+        print(f"Response Tokens : {response.usage_metadata.candidates_token_count}")
+    print(response.text)
+     
+# print(f"Prompt tokens : {response.usage_metadata.prompt_token_count}")
+# print(f"Total tokens : {response.usage_metadata.candidates_token_count}")
