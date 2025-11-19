@@ -37,3 +37,37 @@ class Graph:
         for v in st:
             li.append(v)
         return li
+
+    def bfs(self, val):
+        Que = []
+        Vis = []
+        Que.append(val)
+
+        while len(Que) > 0:
+            front = Que[0]
+            Que = Que[1:]
+            Vis.append(front)
+             
+            if front in self.graph: 
+                for v in self.graph[front]:
+                    if v not in Que and v not in Vis:
+                        Que.append(v)
+
+        return Vis
+
+    def dfs(self, st_vertex):
+        li = []
+
+        dfs_r(li , st_vertex)
+
+        return li
+
+    def dfs_r(self, visited , cur_vertex):
+        visited.append(cur_vertex)
+        if cur_vertex in self.graph:
+
+            for v in self.graph[cur_vertex]:
+                if v not in li:
+                    dfs_r(visited, v)
+
+
